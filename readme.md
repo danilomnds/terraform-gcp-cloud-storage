@@ -9,7 +9,7 @@ Module developed to standardize the creation of Google Cloud Storage.
 
 | Module Version | Terraform Version | Google Version     |
 |----------------|-------------------| ------------------ |
-| v1.0.0         | v1.10.2           | 6.13.0             |
+| v1.0.0         | v1.10.3           | 6.15.0             |
 
 ## Specifying a version
 

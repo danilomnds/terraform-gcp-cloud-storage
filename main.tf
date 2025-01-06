@@ -114,18 +114,18 @@ resource "google_storage_bucket" "bucket" {
   }
 }
 
-resource "google_project_iam_binding" "bucketgetlist" {
+resource "google_project_iam_member" "bucketgetlist" {
   depends_on = [google_storage_bucket.bucket]
-  count      = length(var.members) == 0 && var.customrolebucketreader == null ? 0 : 1
+  for_each   = { for member in var.members : member => member }
   project    = var.project
   role       = var.customrolebucketreader
-  members    = var.members
+  member     = each.value
 }
 
-resource "google_project_iam_binding" "StorageObjectAdmin" {
+resource "google_project_iam_member" "StorageObjectAdmin" {
   depends_on = [google_storage_bucket.bucket]
-  count      = length(var.members) == 0 ? 0 : 1
+  for_each   = { for member in var.members : member => member }
   project    = var.project
   role       = "roles/storage.objectAdmin"
-  members    = var.members
+  member    = each.value
 }
