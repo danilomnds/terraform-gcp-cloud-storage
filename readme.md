@@ -1,7 +1,5 @@
 # Module - Google Cloud Storage
-[![COE](https://img.shields.io/badge/Created%20By-CCoE-blue)]()
-[![HCL](https://img.shields.io/badge/language-HCL-blueviolet)](https://www.terraform.io/)
-[![GCP](https://img.shields.io/badge/provider-GCP-green)](https://registry.terraform.io/providers/hashicorp/google/latest)
+[![COE](https://img.shields.io/badge/Created%20By-CCoE-blue)]()[![HCL](https://img.shields.io/badge/language-HCL-blueviolet)](https://www.terraform.io/)[![GCP](https://img.shields.io/badge/provider-GCP-green)](https://registry.terraform.io/providers/hashicorp/google/latest)
 
 Module developed to standardize the creation of Google Cloud Storage.
 
@@ -9,7 +7,17 @@ Module developed to standardize the creation of Google Cloud Storage.
 
 | Module Version | Terraform Version | Google Version     |
 |----------------|-------------------| ------------------ |
-| v1.0.0         | v1.10.3           | 6.15.0             |
+| v1.0.0         | v1.10.2 - v1.12.2 | 6.13.0 - 6.49.2    |
+| v1.1.0         | v1.13.0           | 6.49.2             |
+
+
+## Release Notes
+
+| Module Version | Note                                      | 
+|----------------|-------------------------------------------|
+| v1.0.0         | Initial Version                           |
+| v1.1.0         | Provider upgrade and RBAC on bucket level |
+
 
 ## Specifying a version
 
@@ -19,13 +27,13 @@ Note: The `?ref=***` refers a tag on the git module repo.
 ## Default use case
 ```hcl
 module "gcs" {    
-  source = "git::https://github.com/danilomnds/terraform-gcp-cloud-storage?ref=v1.0.0"
+  source = "git::https://github.com/danilomnds/terraform-gcp-cloud-storage?ref=v1.1.0"
   project = "project_id"
   name = "gcsname"
   location = "<southamerica-east1>"
   storage_class = "STANDARD"
   # if you have more that one bucket on the same project, please specify the members only one time!
-  members = ["group:GRP_GCP-SYSTEM-PRD@timbrasil.com.br"]
+  members = ["group:GRP_GCP-SYSTEM-PRD@domain.com"]
   labels = {
     diretoria   = "ctio"
     area        = "area"
@@ -45,13 +53,13 @@ output "id" {
 ## Use case Static Website
 ```hcl
 module "gcs" {    
-  source = "git::https://github.com/danilomnds/terraform-gcp-cloud-storage?ref=v1.0.0"
+  source = "git::https://github.com/danilomnds/terraform-gcp-cloud-storage?ref=v1.1.0"
   project = "project_id"
   name = "gcs"
   location = "<southamerica-east1>"
   storage_class = "STANDARD"
   # if you have more that one bucket on the same project, please specify the members only one time!
-  members = ["group:GRP_GCP-SYSTEM-PRD@timbrasil.com.br"]
+  members = ["group:GRP_GCP-SYSTEM-PRD@domain.com]
   website = {
     main_page_suffix = "index.html"
     not_found_page   = "404.html"
@@ -81,13 +89,13 @@ output "id" {
 ## Use case Life Cycle Rules
 ```hcl
 module "gcs" {    
-  source = "git::https://timbrasil@dev.azure.com/timbrasil/Projeto_IaC/_git/gcp-module-storage-bucket?ref=v1.0.0"
+  source = "git::https://github.com/danilomnds/terraform-gcp-cloud-storage?ref=v1.1.0"
   project = "project_id"
   name = "gcsid"
   location = "<southamerica-east1>"
   storage_class = "STANDARD"
   # if you have more that one bucket on the same project, please specify the members only one time!
-  members = ["group:GRP_GCP-SYSTEM-PRD@timbrasil.com.br"]
+  members = ["group:GRP_GCP-SYSTEM-PRD@domain.com"]
   lifecycle_rule = [
     {
       condition  = {
@@ -149,6 +157,7 @@ output "id" {
 | custom_placement_config | The bucket's custom location configuration, which specifies the individual regions that comprise a dual-region bucket. Structure is documented [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
 | soft_delete_policy | The bucket's soft delete policy, which defines the period of time that soft-deleted objects will be retained, and cannot be permanently deleted. Structure is documented [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
 | hierarchical_namespace | The bucket's hierarchical namespace policy, which defines the bucket capability to handle folders in logical structure | `bool` | n/a | No |
+| ip_filter | The bucket IP filtering configuration. Specifies the network sources that can access the bucket, as well as its underlying objects. Structure is documented [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
 | members | list of azure AD groups that will use the resource | `list(string)` | n/a | No |
 
 # Object variables for blocks

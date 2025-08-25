@@ -72,6 +72,7 @@ resource "google_storage_bucket" "bucket" {
       retention_period = lookup(retention_policy.value, "retention_period", null)
     }
   }
+  labels = var.labels
   dynamic "logging" {
     for_each = var.logging != null ? [var.logging] : []
     content {
@@ -109,23 +110,44 @@ resource "google_storage_bucket" "bucket" {
       enabled = hierarchical_namespace.value.enabled
     }
   }
+  dynamic "ip_filter" {
+    for_each = var.ip_filter != null ? [var.ip_filter] : []
+    content {
+      mode                           = ip_filter.value.mode
+      allow_cross_org_vpcs           = lookup(ip_filter.value, "allow_cross_org_vpcs", null)
+      allow_all_service_agent_access = lookup(ip_filter.value, "allow_all_service_agent_access", null)
+      dynamic "public_network_source" {
+        for_each = ip_filter.value.public_network_source != null ? [ip_filter.value.public_network_source] : []
+        content {
+          allowed_ip_cidr_ranges = public_network_source.value.allowed_ip_cidr_ranges
+        }
+      }
+      dynamic "vpc_network_sources" {
+        for_each = ip_filter.value.vpc_network_sources != null ? [ip_filter.value.vpc_network_sources] : []
+        content {
+          network                = vpc_network_sources.value.network
+          allowed_ip_cidr_ranges = vpc_network_sources.value.allowed_ip_cidr_ranges
+        }
+      }
+    }
+  }
   lifecycle {
     ignore_changes = []
   }
 }
 
-resource "google_project_iam_member" "bucketgetlist" {
+resource "google_storage_bucket_iam_member" "bucketgetlist" {
   depends_on = [google_storage_bucket.bucket]
   for_each   = { for member in var.members : member => member }
-  project    = var.project
-  role       = var.customrolebucketreader
+  bucket     = google_storage_bucket.bucket.name
+  role       = "organizations/225850268505/roles/bucketReaderorgtim"
   member     = each.value
 }
 
-resource "google_project_iam_member" "StorageObjectAdmin" {
+resource "google_storage_bucket_iam_member" "StorageObjectAdmin" {
   depends_on = [google_storage_bucket.bucket]
   for_each   = { for member in var.members : member => member }
-  project    = var.project
+  bucket     = google_storage_bucket.bucket.name
   role       = "roles/storage.objectAdmin"
-  member    = each.value
+  member     = each.value
 }

@@ -162,12 +162,23 @@ variable "hierarchical_namespace" {
   default = null
 }
 
+variable "ip_filter" {
+  type = object({
+    mode                           = string
+    allow_cross_org_vpcs           = optional(bool)
+    allow_all_service_agent_access = optional(bool)
+    public_network_source = optional(object({
+      allowed_ip_cidr_ranges = list(string)
+    }))
+    vpc_network_sources = optional(object({
+      network                = string
+      allowed_ip_cidr_ranges = list(string)
+    }))
+  })
+  default = null
+}
+
 variable "members" {
   type    = list(string)
   default = []
-}
-
-variable "customrolebucketreader" {
-  type = string
-  default = null
 }
