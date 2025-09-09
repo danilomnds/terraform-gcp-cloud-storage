@@ -12,7 +12,7 @@ resource "google_storage_bucket" "bucket" {
     }
   }
   dynamic "lifecycle_rule" {
-    for_each = var.lifecycle_rule != null ? var.lifecycle_rule : []
+    for_each = var.lifecycle_rule != [] ? var.lifecycle_rule : []
     content {
       dynamic "action" {
         for_each = lifecycle_rule.value.action != null ? [lifecycle_rule.value.action] : []

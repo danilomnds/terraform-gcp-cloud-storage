@@ -140,7 +140,7 @@ output "id" {
 | project | The ID of the project in which the resource belongs. If it is not provided, the provider project is used | `string` | n/a | No |
 | storage_class | The ID of the project in which the resource belongs. If it is not provided, the provider project is used | `string` | `STANDARD` | No |
 | autoclass | The bucket's Autoclass configuration. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
-| lifecycle_rule | The bucket's Lifecycle Rules configuration. Multiple blocks of this type are permitted. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
+| lifecycle_rule | The bucket's Lifecycle Rules configuration. Multiple blocks of this type are permitted. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `list[object({})]` | `[]` | No |
 | versioning | The bucket's Versioning configuration. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
 | website | Configuration if the bucket acts as a website. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |
 | cors | The bucket's Cross-Origin Resource Sharing (CORS) configuration. Multiple blocks of this type are permitted. Check the documentation [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | `object({})` | n/a | No |

@@ -53,7 +53,7 @@ variable "lifecycle_rule" {
       noncurrent_time_before                  = optional(string)
     })
   }))
-  default = null
+  default = []
 }
 
 variable "versioning" {
